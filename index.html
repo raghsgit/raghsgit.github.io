@@ -77,6 +77,12 @@
     .save-btn:hover {
       background-color: #0056b3;
     }
+    .divider {
+  border: none;
+  border-top: 1px solid #ccc; /* Light gray line */
+  margin: 10px 0; /* Space above and below the line */
+  width: 80%; /* Adjust width for better visual balance */
+}
   </style>
 </head>
 <body>
@@ -123,7 +129,7 @@ async function displayContact() {
     contactCard.innerHTML = `
       <img src="./logo.jpeg" class="logo" alt="Logo">
       <h1>${contact.name}</h1>
-      <hr>
+       <hr class="divider"> <!-- Horizontal line below the name -->
       <div class="info">
         <a href="tel:${contact.mobile}">
           <img src="./email.png" alt="Phone"> ${contact.mobile}
