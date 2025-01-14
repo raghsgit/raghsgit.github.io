@@ -3,54 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Card</title>
+  <title>Dynamic Contact Page</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #007bff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
     }
     .card {
-      background-color: #fff;
-      width: 90%;
-      max-width: 400px;
-      padding: 20px;
+      background: #fff;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      max-width: 400px;
+      margin: 20px auto;
       text-align: center;
-    }
-    .card img {
-      width: 50px;
-      height: auto;
-      margin-bottom: 20px;
     }
     .card h1 {
       font-size: 1.5rem;
-      margin: 10px 0;
     }
-    .card hr {
-      border: none;
-      border-top: 1px solid #ccc;
-      margin: 20px 0;
-    }
-    .info {
-      text-align: left;
-      margin: 10px 0;
-    }
-    .info a {
-      text-decoration: none;
+    .card a {
       color: #007bff;
-      display: flex;
-      align-items: center;
+      text-decoration: none;
       margin: 10px 0;
-    }
-    .info a img {
-      width: 20px;
-      margin-right: 10px;
+      display: block;
     }
     .save-btn {
       margin-top: 20px;
@@ -59,7 +36,6 @@
       color: #fff;
       border: none;
       border-radius: 5px;
-      font-size: 1rem;
       cursor: pointer;
     }
     .save-btn:hover {
@@ -68,50 +44,77 @@
   </style>
 </head>
 <body>
-  <div class="card">
-    <img src="./comp.jpeg" alt="Logo">
-    <h1>Vivek Pandit</h1>
-    <hr>
-    <div class="info">
-      <a href="tel:+911234554321">
-        <img src="./email.png" alt="Phone"> +91 12345 54321
-      </a>
-      <a href="mailto:email_id@site.com">
-        <img src="./email.png" alt="Email"> email_id@site.com
-      </a>
-      <a href="https://linkedin.com/in/username">
-        <img src="./email.png" alt="LinkedIn"> linkedin link
-      </a>
-    </div>
-    <button class="save-btn" onclick="downloadVCard()">Save to Contacts</button>
+  <div id="contact-card" class="card">
+    <h1>Loading...</h1>
   </div>
 
   <script>
-    function downloadVCard() {
-      // Define vCard content
+    async function fetchContacts() {
+      // Load the CSV file
+      const response = await fetch("contacts.csv");
+      const csvText = await response.text();
+
+      // Parse the CSV into an array of objects
+      const rows = csvText.split("\n").map(row => row.split(","));
+      const headers = rows.shift(); // Remove the header row
+      const contacts = rows.map(row => {
+        const obj = {};
+        row.forEach((cell, index) => {
+          obj[headers[index].trim()] = cell.trim();
+        });
+        return obj;
+      });
+
+      return contacts;
+    }
+
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get("name");
+      return name ? name.toLowerCase() : null;
+    }
+
+    async function displayContact() {
+      const contacts = await fetchContacts();
+      const nameParam = getQueryParams();
+      const contactCard = document.getElementById("contact-card");
+
+      // Find the contact based on the URL parameter
+      const contact = contacts.find(c => c.name.toLowerCase() === nameParam);
+
+      if (contact) {
+        contactCard.innerHTML = `
+          <h1>${contact.name}</h1>
+          <p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
+          <p><strong>Phone:</strong> <a href="tel:${contact.mobile}">${contact.mobile}</a></p>
+          <p><strong>LinkedIn:</strong> <a href="${contact['linkdin link']}" target="_blank">View Profile</a></p>
+          <button class="save-btn" onclick="downloadVCard('${contact.name}', '${contact.email}', '${contact.mobile}', '${contact['linkdin link']}')">Save to Contacts</button>
+        `;
+      } else {
+        contactCard.innerHTML = `<h1>Contact not found</h1>`;
+      }
+    }
+
+    function downloadVCard(name, email, phone, linkedin) {
       const vCardData = `BEGIN:VCARD
 VERSION:3.0
-N:Vivek;Pandit;;;
-FN:Vivek Pandit
-TEL;TYPE=WORK,VOICE:+911234554321
-EMAIL:email_id@site.com
-URL:https://linkedin.com/in/username
+N:${name};;;;
+FN:${name}
+TEL;TYPE=WORK,VOICE:${phone}
+EMAIL:${email}
+URL:${linkedin}
 END:VCARD`;
 
-      // Create a Blob object with the vCard content
       const blob = new Blob([vCardData], { type: "text/vcard" });
-
-      // Create a link element to download the vCard
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "Vivek_Pandit.vcf";
-
-      // Simulate a click on the link
+      link.download = `${name.replace(/ /g, "_")}.vcf`;
       link.click();
-
-      // Clean up the URL object
       URL.revokeObjectURL(link.href);
     }
+
+    // Load the contact on page load
+    displayContact();
   </script>
 </body>
 </html>
