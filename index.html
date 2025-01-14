@@ -45,9 +45,11 @@
     }
     .card hr {
       border: none;
-      border-top: 1px solid #ccc;
-      margin: 20px 0;
-    }
+  border: none;
+  border-top: 1px solid #ccc; /* Light gray line */
+  margin: 10px 0; /* Space above and below the line */
+  width: 80%; /* Adjust width for better visual balance */
+}
     .info {
       text-align: left;
       margin: 10px 0;
@@ -77,12 +79,7 @@
     .save-btn:hover {
       background-color: #0056b3;
     }
-    .divider {
-  border: none;
-  border-top: 1px solid #ccc; /* Light gray line */
-  margin: 10px 0; /* Space above and below the line */
-  width: 80%; /* Adjust width for better visual balance */
-}
+
   </style>
 </head>
 <body>
@@ -140,8 +137,8 @@ async function displayContact() {
         <a href="${contact['linkedin link']}" target="_blank">
           <img src="./email.png" alt="LinkedIn"> View LinkedIn
         </a>
-        <hr class="divider"> <!-- Horizontal line below the linkedin profile -->
       </div>
+        <hr class="divider"> <!-- Horizontal line below the linkedin profile -->
       <button class="save-btn" onclick="downloadVCard('${contact.name}', '${contact.email}', '${contact.mobile}', '${contact['linkedin link']}')">Save to Contacts</button>
     `;
   } else {
