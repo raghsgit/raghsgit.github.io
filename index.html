@@ -45,7 +45,7 @@
 </head>
 <body>
   <div id="contact-card" class="card">
-    <h1>Loading...</h1>
+    <h1>Hey, Welcome !!</h1>
   </div>
 
   <script>
@@ -70,17 +70,18 @@
 
     function getQueryParams() {
       const params = new URLSearchParams(window.location.search);
-      const name = params.get("name");
-      return name ? name.toLowerCase() : null;
+      const id = params.get("id");
+      return id
+      // return name ? name.toLowerCase() : null;
     }
 
     async function displayContact() {
       const contacts = await fetchContacts();
-      const nameParam = getQueryParams();
+      const searchParam = getQueryParams();
       const contactCard = document.getElementById("contact-card");
 
       // Find the contact based on the URL parameter
-      const contact = contacts.find(c => c.name.toLowerCase() === nameParam);
+      const contact = contacts.find(c => c.id === searchParam);
 
       if (contact) {
         contactCard.innerHTML = `
