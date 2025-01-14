@@ -51,7 +51,7 @@
   <script>
 async function fetchContacts() {
   // Load the CSV file
-  const response = await fetch("contacts.csv");
+  const response = await fetch("./contacts.csv");
   const csvText = await response.text();
 
   // Parse the CSV into an array of objects
