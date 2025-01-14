@@ -15,14 +15,19 @@
       height: 100vh;
     }
     .card {
-      background-color: #fff;
-      width: 90%;
-      max-width: 400px;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      text-align: center;
-    }
+  background-color: #fff;
+  width: 90%;
+  max-width: 400px;
+  height: 90vh; /* Set the height to 90% of the viewport */
+  padding: 30px; /* Increased padding for inner spacing */
+  margin: 0 20px; /* Add horizontal space between the card and the body */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  display: flex; /* Flexbox for alignment */
+  flex-direction: column; /* Stack content vertically */
+  justify-content: center; /* Center content vertically */
+}
     .card img {
       width: 50px;
       height: auto;
