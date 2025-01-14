@@ -49,73 +49,53 @@
   </div>
 
   <script>
-    async function fetchContacts() {
-      // Load the CSV file
-      const response = await fetch("contacts.csv");
-      const csvText = await response.text();
+async function fetchContacts() {
+  // Load the CSV file
+  const response = await fetch("contacts.csv");
+  const csvText = await response.text();
 
-      // Parse the CSV into an array of objects
-      const rows = csvText.split("\n").map(row => row.split(","));
-      const headers = rows.shift(); // Remove the header row
-      const contacts = rows.map(row => {
-        const obj = {};
-        row.forEach((cell, index) => {
-          obj[headers[index].trim()] = cell.trim();
-        });
-        return obj;
-      });
+  // Parse the CSV into an array of objects
+  const rows = csvText.split("\n").map(row => row.split(","));
+  const headers = rows.shift(); // Remove the header row
+  const contacts = rows.map(row => {
+    const obj = {};
+    row.forEach((cell, index) => {
+      obj[headers[index].trim()] = cell.trim();
+    });
+    return obj;
+  });
 
-      return contacts;
-    }
+  console.log(contacts); // Debug log to check contacts data
+  return contacts;
+}
 
-    function getQueryParams() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get("id");
-      return id
-      // return name ? name.toLowerCase() : null;
-    }
+function getQueryParams() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  console.log(id); // Debug log to check the id
+  return id;
+}
 
-    async function displayContact() {
-      const contacts = await fetchContacts();
-      const searchParam = getQueryParams();
-      const contactCard = document.getElementById("contact-card");
+async function displayContact() {
+  const contacts = await fetchContacts();
+  const searchParam = getQueryParams();
+  const contactCard = document.getElementById("contact-card");
 
-      // Find the contact based on the URL parameter
-      const contact = contacts.find(c => c.id === searchParam);
+  // Find the contact based on the URL parameter
+  const contact = contacts.find(c => c.id === searchParam);
 
-      if (contact) {
-        contactCard.innerHTML = `
-          <h1>${contact.name}</h1>
-          <p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
-          <p><strong>Phone:</strong> <a href="tel:${contact.mobile}">${contact.mobile}</a></p>
-          <p><strong>LinkedIn:</strong> <a href="${contact['linkdin link']}" target="_blank">View Profile</a></p>
-          <button class="save-btn" onclick="downloadVCard('${contact.name}', '${contact.email}', '${contact.mobile}', '${contact['linkdin link']}')">Save to Contacts</button>
-        `;
-      } else {
-        contactCard.innerHTML = `<h1>Contact not found</h1>`;
-      }
-    }
-
-    function downloadVCard(name, email, phone, linkedin) {
-      const vCardData = `BEGIN:VCARD
-VERSION:3.0
-N:${name};;;;
-FN:${name}
-TEL;TYPE=WORK,VOICE:${phone}
-EMAIL:${email}
-URL:${linkedin}
-END:VCARD`;
-
-      const blob = new Blob([vCardData], { type: "text/vcard" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `${name.replace(/ /g, "_")}.vcf`;
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
-
-    // Load the contact on page load
-    displayContact();
+  if (contact) {
+    contactCard.innerHTML = `
+      <h1>${contact.name}</h1>
+      <p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
+      <p><strong>Phone:</strong> <a href="tel:${contact.mobile}">${contact.mobile}</a></p>
+      <p><strong>LinkedIn:</strong> <a href="${contact['linkedin link']}" target="_blank">View Profile</a></p>
+      <button class="save-btn" onclick="downloadVCard('${contact.name}', '${contact.email}', '${contact.mobile}', '${contact['linkedin link']}')">Save to Contacts</button>
+    `;
+  } else {
+    contactCard.innerHTML = `<h1>Contact not found</h1>`;
+  }
+}
   </script>
 </body>
 </html>
