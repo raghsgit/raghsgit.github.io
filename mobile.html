@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Card</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #007bff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background-color: #fff;
+      width: 90%;
+      max-width: 400px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    .card img {
+      width: 50px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    .card h1 {
+      font-size: 1.5rem;
+      margin: 10px 0;
+    }
+    .card hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 20px 0;
+    }
+    .info {
+      text-align: left;
+      margin: 10px 0;
+    }
+    .info a {
+      text-decoration: none;
+      color: #007bff;
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .info a img {
+      width: 20px;
+      margin-right: 10px;
+    }
+    .save-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .save-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="logo.png" alt="Logo">
+    <h1>Vivek Pandit</h1>
+    <hr>
+    <div class="info">
+      <a href="tel:+911234554321">
+        <img src="phone-icon.png" alt="Phone"> +91 12345 54321
+      </a>
+      <a href="mailto:email_id@site.com">
+        <img src="email-icon.png" alt="Email"> email_id@site.com
+      </a>
+      <a href="https://linkedin.com/in/username">
+        <img src="linkedin-icon.png" alt="LinkedIn"> linkedin link
+      </a>
+    </div>
+    <button class="save-btn">Save to Contacts</button>
+  </div>
+</body>
+</html>
