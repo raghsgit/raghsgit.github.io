@@ -83,7 +83,35 @@
         <img src="./email.png" alt="LinkedIn"> linkedin link
       </a>
     </div>
-    <button class="save-btn">Save to Contacts</button>
+    <button class="save-btn" onclick="downloadVCard()">Save to Contacts</button>
   </div>
+
+  <script>
+    function downloadVCard() {
+      // Define vCard content
+      const vCardData = `BEGIN:VCARD
+VERSION:3.0
+N:Vivek;Pandit;;;
+FN:Vivek Pandit
+TEL;TYPE=WORK,VOICE:+911234554321
+EMAIL:email_id@site.com
+URL:https://linkedin.com/in/username
+END:VCARD`;
+
+      // Create a Blob object with the vCard content
+      const blob = new Blob([vCardData], { type: "text/vcard" });
+
+      // Create a link element to download the vCard
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Vivek_Pandit.vcf";
+
+      // Simulate a click on the link
+      link.click();
+
+      // Clean up the URL object
+      URL.revokeObjectURL(link.href);
+    }
+  </script>
 </body>
 </html>
