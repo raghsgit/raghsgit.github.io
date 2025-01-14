@@ -6,28 +6,51 @@
   <title>Dynamic Contact Page</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      background-color: #007bff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
     .card {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      padding: 20px;
+      background-color: #fff;
+      width: 90%;
       max-width: 400px;
-      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       text-align: center;
+    }
+    .card img {
+      width: 50px;
+      height: auto;
+      margin-bottom: 20px;
     }
     .card h1 {
       font-size: 1.5rem;
-    }
-    .card a {
-      color: #007bff;
-      text-decoration: none;
       margin: 10px 0;
-      display: block;
+    }
+    .card hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 20px 0;
+    }
+    .info {
+      text-align: left;
+      margin: 10px 0;
+    }
+    .info a {
+      text-decoration: none;
+      color: #007bff;
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .info a img {
+      width: 20px;
+      margin-right: 10px;
     }
     .save-btn {
       margin-top: 20px;
@@ -36,6 +59,7 @@
       color: #fff;
       border: none;
       border-radius: 5px;
+      font-size: 1rem;
       cursor: pointer;
     }
     .save-btn:hover {
@@ -50,13 +74,12 @@
 
   <script>
 async function fetchContacts() {
-  // Load the CSV file
   const response = await fetch("./contacts.csv");
   const csvText = await response.text();
 
   // Parse the CSV into an array of objects
   const rows = csvText.split("\n").map(row => row.split(","));
-  const headers = rows.shift(); // Remove the header row
+  const headers = rows.shift();
   const contacts = rows.map(row => {
     const obj = {};
     row.forEach((cell, index) => {
@@ -86,17 +109,46 @@ async function displayContact() {
 
   if (contact) {
     contactCard.innerHTML = `
+      <img src="logo.jpeg" alt="Logo">
       <h1>${contact.name}</h1>
-      <p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
-      <p><strong>Phone:</strong> <a href="tel:${contact.mobile}">${contact.mobile}</a></p>
-      <p><strong>LinkedIn:</strong> <a href="${contact['linkedin link']}" target="_blank">View Profile</a></p>
+      <hr>
+      <div class="info">
+        <a href="tel:${contact.mobile}">
+          <img src="./email.png" alt="Phone"> ${contact.mobile}
+        </a>
+        <a href="mailto:${contact.email}">
+          <img src="./email.png" alt="Email"> ${contact.email}
+        </a>
+        <a href="${contact['linkedin link']}" target="_blank">
+          <img src="./email.png" alt="LinkedIn"> View LinkedIn
+        </a>
+      </div>
       <button class="save-btn" onclick="downloadVCard('${contact.name}', '${contact.email}', '${contact.mobile}', '${contact['linkedin link']}')">Save to Contacts</button>
     `;
   } else {
     contactCard.innerHTML = `<h1>Contact not found</h1>`;
   }
 }
-    displayContact();
+
+function downloadVCard(name, email, phone, linkedin) {
+  const vCardData = `BEGIN:VCARD
+VERSION:3.0
+N:${name};;;;
+FN:${name}
+TEL;TYPE=WORK,VOICE:${phone}
+EMAIL:${email}
+URL:${linkedin}
+END:VCARD`;
+
+  const blob = new Blob([vCardData], { type: "text/vcard" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `${name.replace(/ /g, "_")}.vcf`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+displayContact();
   </script>
 </body>
 </html>
