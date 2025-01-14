@@ -140,6 +140,7 @@ async function displayContact() {
         <a href="${contact['linkedin link']}" target="_blank">
           <img src="./email.png" alt="LinkedIn"> View LinkedIn
         </a>
+        <hr class="divider"> <!-- Horizontal line below the linkedin profile -->
       </div>
       <button class="save-btn" onclick="downloadVCard('${contact.name}', '${contact.email}', '${contact.mobile}', '${contact['linkedin link']}')">Save to Contacts</button>
     `;
